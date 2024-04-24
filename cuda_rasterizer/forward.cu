@@ -333,6 +333,9 @@ renderCUDA(
 		}
 		block.sync();
 
+  		float max_weight = -1.0f;
+  		int max_weight_idx = -1;
+
 		// Iterate over current batch
 		for (int j = 0; !done && j < min(BLOCK_SIZE, toDo); j++)
 		{
@@ -356,6 +359,12 @@ renderCUDA(
 			if (alpha < 1.0f / 255.0f) {
 				continue;
 			}
+
+   			if (alpha > max_weight) {
+     			max_weight = alpha;
+    			max_weight_idx = collected_id[j];
+   			}
+
 			float test_T = T * (1 - alpha);
 			if (test_T < 0.0001f)
 			{
@@ -377,6 +386,9 @@ renderCUDA(
 			// pixel.
 			last_contributor = contributor;
 		}
+  		if (max_weight_idx >= 0) {
+    		atomicAdd(&(max_weight_mask[max_weight_idx]), 1);
+  		}
 	}
 
 	// All threads that treat valid pixel write out their final
