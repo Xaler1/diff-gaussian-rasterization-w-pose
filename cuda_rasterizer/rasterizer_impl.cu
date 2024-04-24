@@ -220,6 +220,8 @@ int CudaRasterizer::Rasterizer::forward(
 	float* out_opacity,
 	int* radii,
 	int* n_touched,
+ 	int* max_weight_mask,
+ 	int* first_touched,
 	bool debug)
 {
 	const float focal_y = height / (2.0f * tan_fovy);
@@ -337,7 +339,9 @@ int CudaRasterizer::Rasterizer::forward(
 		geomState.depths,
 		out_depth, 
 		out_opacity,
-		n_touched
+		n_touched,
+       	max_weight_mask,
+       	first_touched
     ), debug)
 
 	return num_rendered;

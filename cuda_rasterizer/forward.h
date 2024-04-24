@@ -63,7 +63,9 @@ namespace FORWARD
 		const float* depth,
 	    float* out_depth,
 		float* out_opacity,
-		int* n_touched);
+		int* n_touched,
+  		int* max_weight_mask,
+  		int* first_touched);
 }
 
 

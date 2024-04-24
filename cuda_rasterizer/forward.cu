@@ -276,7 +276,9 @@ renderCUDA(
 	const float* __restrict__ depth,
 	float* __restrict__ out_depth, 
 	float* __restrict__ out_opacity,
-	int * __restrict__ n_touched)
+	int * __restrict__ n_touched,
+ 	int * __restrict__ max_weight_mask,
+ 	int * __restrict__ first_touched)
 {
 	// Identify current tile and associated min/max pixel range.
 	auto block = cg::this_thread_block();
@@ -406,7 +408,9 @@ void FORWARD::render(
 	const float* depth,
 	float* out_depth, 
 	float* out_opacity,
-	int* n_touched)
+	int* n_touched,
+ 	int* max_weight_mask,
+ 	int* first_touched)
 {
 	renderCUDA<NUM_CHANNELS> << <grid, block >> > (
 		ranges,
@@ -422,7 +426,9 @@ void FORWARD::render(
 		depth,
 		out_depth,
 		out_opacity,
-		n_touched);
+		n_touched,
+  		max_weight_mask,
+  		first_touched);
 }
 
 void FORWARD::preprocess(int P, int D, int M,
